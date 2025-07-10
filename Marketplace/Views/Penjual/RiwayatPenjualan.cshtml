@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Marketplace.Models.Transaksi>
+
+@{
+    ViewData["Title"] = "Riwayat Penjualan";
+    Layout = "~/Views/Shared/_LayoutPenjual.cshtml";
+}
+
+<h2>Riwayat Penjualan</h2>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Tanggal</th>
+            <th>Nama Ikan</th>
+            <th>Pembeli</th>
+            <th>Jumlah</th>
+            <th>Total Harga</th>
+            <th>Status</th>
+            <th>Bukti Pembayaran</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="7" class="text-center">Belum ada riwayat penjualan.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var transaksi in Model)
+            {
+                <tr>
+                    <td>@transaksi.Tanggal.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@transaksi.Ikan?.NamaIkan</td>
+                    <td>@transaksi.Pembeli?.NamaLengkap</td>
+                    <td>@transaksi.Jumlah</td>
+                    <td>@transaksi.TotalHarga.ToString("C")</td>
+                    <td>@transaksi.Status</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(transaksi.Pembayarans.FirstOrDefault()?.BuktiBayar))
+                        {
+                            <a href="~/@transaksi.Pembayarans.FirstOrDefault().BuktiBayar" target="_blank">Lihat Bukti</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

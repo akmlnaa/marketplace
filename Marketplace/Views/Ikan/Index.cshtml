@@ -1,0 +1,43 @@
+﻿@model List<Marketplace.Models.Ikan>
+
+@{
+    ViewData["Title"] = "Dashboard Penjual";
+}
+
+<h2>Dashboard Penjual</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">+ Tambah Ikan</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nama Ikan</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Gambar</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ikan in Model)
+        {
+            <tr>
+                <td>@ikan.NamaIkan</td>
+                <td>Rp @ikan.Harga</td>
+                <td>@ikan.Stok</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(ikan.Gambar))
+                    {
+                        <img src="@ikan.Gambar" alt="@ikan.NamaIkan" style="width:100px; height:100px;" />
+                    }
+                </td>
+                <td>
+                    <a asp-action="EditIkan" asp-route-id="@ikan.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="HapusIkan" asp-route-id="@ikan.Id" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin hapus ikan ini?')">Hapus</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="KelolaPenjualan" class="btn btn-primary">Kelola Penjualan</a>

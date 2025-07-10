@@ -1,0 +1,51 @@
+﻿@model Marketplace.Models.Ikan
+
+@{
+    ViewData["Title"] = "Tambah Ikan";
+}
+
+<h2>Tambah Ikan</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label class="form-label">Nama Ikan</label>
+        <input asp-for="NamaIkan" class="form-control" />
+        <span asp-validation-for="NamaIkan" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Harga</label>
+        <input asp-for="Harga" class="form-control" />
+        <span asp-validation-for="Harga" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Stok</label>
+        <input asp-for="Stok" class="form-control" />
+        <span asp-validation-for="Stok" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Deskripsi</label>
+        <textarea asp-for="Deskripsi" class="form-control"></textarea>
+        <span asp-validation-for="Deskripsi" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Tanggal Publish</label>
+        <input asp-for="TanggalPublish" type="date" class="form-control" />
+        <span asp-validation-for="TanggalPublish" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="GambarFile" class="form-label">Upload Gambar</label>
+        <input asp-for="GambarFile" type="file" class="form-control" />
+        <span asp-validation-for="GambarFile" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Simpan</button>
+    <a asp-action="Index" class="btn btn-secondary">Batal</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

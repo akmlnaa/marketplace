@@ -1,0 +1,116 @@
+﻿@model IEnumerable<Marketplace.Models.Ikan>
+
+@{
+    Layout = "~/Views/Shared/_LayoutPembeli.cshtml";
+    var currentSort = ViewBag.CurrentSort as string;
+    var currentSearch = ViewBag.CurrentSearch as string;
+}
+
+<!-- Search & Sort -->
+<form class="row mb-4 mt-3" method="get" asp-action="Index">
+    <div class="col-md-6 mb-2">
+        <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Cari nama ikan..." />
+    </div>
+    <div class="col-md-4 mb-2">
+        <select name="sort" class="form-select">
+            <option value="">Urutkan</option>
+            <option value="harga_asc" selected="@(currentSort == "harga_asc")">Harga Terendah</option>
+            <option value="harga_desc" selected="@(currentSort == "harga_desc")">Harga Tertinggi</option>
+        </select>
+    </div>
+    <div class="col-md-2 mb-2">
+        <button type="submit" class="btn btn-primary w-100">Terapkan</button>
+    </div>
+</form>
+
+<!-- Kategori -->
+<div class="mb-4">
+    <h5>Kategori:</h5>
+    <div class="d-flex flex-wrap gap-2">
+        <span class="badge bg-secondary p-2">Ikan Air Tawar</span>
+        <span class="badge bg-secondary p-2">Ikan Laut</span>
+        <span class="badge bg-secondary p-2">Ikan Fillet</span>
+        <span class="badge bg-secondary p-2">Paket Hemat</span>
+    </div>
+</div>
+
+<!-- Daftar Ikan -->
+@if (!Model.Any())
+{
+    <div class="alert alert-warning text-center">Ikan tidak ditemukan.</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        @foreach (var ikan in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 hover-shadow">
+                    <img src="@ikan.Gambar" class="card-img-top" alt="@ikan.NamaIkan" style="height: 200px; object-fit: cover;" />
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary">@ikan.NamaIkan</h5>
+                        <p class="card-text mb-1"><strong>Rp @ikan.Harga.ToString("N0")</strong></p>
+                        <span class="badge bg-success mb-2">Stok: @ikan.Stok</span>
+
+                        <!-- Dummy Rating -->
+                        <div class="mb-2 text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+
+                        <a href="@Url.Action("AddToCart", "Transaksi", new { ikanId = ikan.Id })" class="btn btn-outline-success mb-2 w-100">
+                            <i class="fas fa-cart-plus me-1"></i> Tambah ke Keranjang
+                        </a>
+
+
+
+                        <a href="@Url.Action("Detail", "Ikan", new { id = ikan.Id })" class="btn btn-info w-100">
+                            <i class="fas fa-eye me-1"></i> Lihat Detail
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<!-- Styles -->
+<style>
+    .hover-shadow:hover {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        transition: 0.3s ease-in-out;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+        font-size: 18px;
+        text-align: center;
+        color: white;
+    }
+
+        .navbar-nav .nav-item .nav-link:hover {
+            text-decoration: underline;
+        }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .fa-star, .fa-star-half-alt, .far.fa-star {
+        margin-right: 2px;
+    }
+</style>

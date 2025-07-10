@@ -1,0 +1,94 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Marketplace Cerdas - Penjual</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        .navbar-nav .nav-item .nav-link {
+            font-size: 18px;
+            text-align: center;
+            color: white;
+        }
+
+            .navbar-nav .nav-item .nav-link:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar khusus Penjual -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-store me-2"></i> Marketplace Cerdas
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPenjual">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarPenjual">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "Toko")" title="Dashboard Toko">
+                            <i class="fa-solid fa-house"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Profile", "Penjual")" title="Profil Penjual">
+                            <i class="fa-solid fa-user"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("PembayaranMasuk", "Penjual")" title="Pembayaran Masuk">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("RiwayatPenjualan", "Penjual")" title="Riwayat Penjualan">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="Logout" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mt-4">
+        @RenderBody()
+    </div>
+
+    <!-- Modal Logout -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Konfirmasi Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin keluar dari akun Anda?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <a href="@Url.Action("Logout", "Account")" class="btn btn-danger">Keluar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+﻿@model List<Marketplace.Models.Transaksi>
+@{
+    ViewData["Title"] = "Keranjang Belanja";
+    var totalHargaSemua = Model?.Sum(m => m.TotalHarga) ?? 0;
+    Layout = "~/Views/Shared/_LayoutPembeli.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Keranjang kamu kosong.</div>
+}
+else
+{
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Error"]</div>
+    }
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Pilih</th>
+                <th>Nama Ikan</th>
+                <th>Jumlah</th>
+                <th>Harga Satuan</th>
+                <th>Total</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" form="checkoutForm" name="selectedIds" value="@item.Id" />
+                    </td>
+                    <td>@item.Ikan?.NamaIkan</td>
+                    <td>@item.Jumlah</td>
+                    <td>Rp @item.Ikan?.Harga</td>
+                    <td>Rp @item.TotalHarga</td>
+                    <td>
+                        <form asp-controller="Transaksi" asp-action="Remove" method="post">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <form id="checkoutForm" asp-action="Checkout" method="post">
+        <div class="text-end mt-3">
+            <h5>Total Belanja: <strong>Rp @totalHargaSemua</strong></h5>
+            <button type="submit" class="btn btn-success">Checkout</button>
+        </div>
+    </form>
+
+}

@@ -1,0 +1,18 @@
+﻿@model Marketplace.Models.Toko
+
+@{
+    ViewData["Title"] = "Hapus Toko";
+}
+
+<h2>Yakin ingin menghapus toko ini?</h2>
+
+<div>
+    <h4>@Model.NamaToko</h4>
+    <p>@Model.Alamat</p>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+        <a asp-action="Index" class="btn btn-secondary">Batal</a>
+    </form>
+</div>

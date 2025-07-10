@@ -1,0 +1,28 @@
+﻿@model Marketplace.Models.Ikan
+
+@{
+    ViewData["Title"] = "Edit Ikan";
+}
+
+<h2>Edit Ikan</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label class="form-label">Nama Ikan</label>
+        <input asp-for="NamaIkan" class="form-control" />
+        <span asp-validation-for="NamaIkan" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Harga</label>
+        <input asp-for="Harga" class="form-control" />
+        <span asp-validation-for="Harga" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Stok</label>
+        <input asp-for="Stok" class="form-control" />
+        <span asp-validation-for="Stok" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-warning">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Batal</a>
+</form>

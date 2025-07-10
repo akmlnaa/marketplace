@@ -1,0 +1,39 @@
+﻿@model Marketplace.Models.User
+@{
+    ViewData["Title"] = "Dashboard Penjual";
+    var sudahPunyaToko = ViewBag.SudahPunyaToko as bool? ?? false;
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-4 p-4">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-primary">Selamat Datang, @Model.Username!</h2>
+            <p class="text-muted">Ini adalah halaman utama penjual di Marketplace Ikan Cerdas.</p>
+        </div>
+
+        @if (!sudahPunyaToko)
+        {
+            <div class="alert alert-warning text-center">
+                <i class="bi bi-exclamation-circle-fill me-2"></i>
+                Anda belum memiliki toko. Silakan buat toko terlebih dahulu.
+            </div>
+            <div class="text-center">
+                <a href="@Url.Action("Create", "Toko")" class="btn btn-primary btn-lg rounded-pill px-5 shadow">
+                    <i class="bi bi-shop-window me-2"></i> Buka Toko Sekarang
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success text-center">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                Anda sudah memiliki toko! Ayo kelola toko Anda sekarang.
+            </div>
+            <div class="text-center">
+                <a href="@Url.Action("Index", "Toko")" class="btn btn-success btn-lg rounded-pill px-5 shadow">
+                    <i class="bi bi-box-seam me-2"></i> Lihat Toko Anda
+                </a>
+            </div>
+        }
+    </div>
+</div>

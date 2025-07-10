@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Marketplace.Models.Transaksi>
+
+@{
+    ViewData["Title"] = "Riwayat Pembelian";
+    Layout = "~/Views/Shared/_LayoutPembeli.cshtml";
+}
+
+<h2 class="mb-4">Riwayat Pembelian</h2>
+
+<table class="table table-striped table-hover table-bordered align-middle shadow-sm rounded">
+    <thead class="bg-primary text-white text-center">
+        <tr>
+            <th>Nama Ikan</th>
+            <th>Jumlah</th>
+            <th>Total Harga</th>
+            <th>Tanggal</th>
+            <th>Status</th>
+            <th>Bukti Bayar</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="7" class="text-center text-muted">Belum ada transaksi.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var transaksi in Model)
+            {
+                var pembayaran = transaksi.Pembayarans.FirstOrDefault();
+                <tr>
+                    <td>@transaksi.Ikan?.NamaIkan</td>
+                    <td class="text-center">@transaksi.Jumlah</td>
+                    <td class="text-center">@transaksi.TotalHarga.ToString("C")</td>
+                    <td class="text-center">@transaksi.Tanggal.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="text-center">
+                        <span class="badge
+                            @(transaksi.Status switch
+                            {
+                                "Menunggu Konfirmasi" => "bg-warning text-dark",
+                                "Dikonfirmasi" => "bg-info text-dark",
+                                "Dikirim" => "bg-primary",
+                                "Selesai" => "bg-success",
+                                "Ditolak" => "bg-danger",
+                                _ => "bg-secondary"
+                            })">
+                            @transaksi.Status
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        @if (pembayaran != null && !string.IsNullOrEmpty(pembayaran.BuktiBayar))
+                        {
+                            <a href="~/@pembayaran.BuktiBayar" target="_blank" class="btn btn-sm btn-outline-primary">Lihat Bukti</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted"><i class="bi bi-x-circle"></i> Pembayaran COD </span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        @if (transaksi.Status == "Dikirim")
+                        {
+                            <form asp-action="KonfirmasiTerima" asp-controller="Pembeli" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@transaksi.Id" />
+                                <button type="submit" class="btn btn-success btn-sm">Konfirmasi Terima</button>
+                            </form>
+                        }
+                        else if (transaksi.Status == "Selesai")
+                        {
+                            <a class="btn btn-warning btn-sm"
+                               href="@Url.Action("Beri", "Rating", new { ikanId = transaksi.Ikan.Id })">
+                                Beri Rating
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

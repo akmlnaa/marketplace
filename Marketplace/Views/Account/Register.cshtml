@@ -1,0 +1,151 @@
+﻿@model Marketplace.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Daftar Akun";
+}
+
+<style>
+    /* Pastikan wrapper mengambil seluruh tinggi layar */
+    .auth-wrapper {
+        min-height: 100vh; /* Setel tinggi minimal ke 100% layar */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Kiri - ilustrasi */
+    .auth-left {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+    }
+
+    /* Kanan - form register */
+    .auth-right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+    }
+
+    /* Form box styling */
+    .form-box {
+        width: 100%;
+        max-width: 450px; /* Memperbesar form sedikit */
+        padding: 40px; /* Menambahkan padding agar lebih lapang */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        background-color: white;
+    }
+
+    /* Styling untuk tombol register */
+    .btn {
+        width: 100%;
+        padding: 14px; /* Membuat tombol lebih besar */
+        font-size: 16px; /* Membesarkan ukuran font tombol */
+    }
+
+    /* Styling input fields */
+    .form-control {
+        font-size: 16px; /* Membesarkan ukuran font input field */
+        padding: 15px; /* Membuat input field lebih besar */
+    }
+
+    /* Styling untuk judul dan teks */
+    h2 {
+        font-size: 32px; /* Membesarkan ukuran font judul */
+    }
+
+    /* Styling untuk link login */
+    .text-center a {
+        text-decoration: none;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+        .text-center a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="auth-wrapper">
+    <!-- Ilustrasi kiri -->
+    <div class="auth-left d-none d-md-flex">
+        <img src="~/images/illustration-register.jpg" alt="Ilustrasi Register" class="img-fluid" />
+    </div>
+
+    <!-- Form register -->
+    <div class="auth-right">
+        <div class="form-box">
+            <h2 class="mb-4 text-primary text-center">Daftar Akun</h2>
+
+            <form asp-action="Register" method="post">
+                <div class="mb-3">
+                    <label asp-for="Username" class="form-label">Username</label>
+                    <input asp-for="Username" class="form-control rounded-pill" placeholder="Username" />
+                    <span asp-validation-for="Username" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control rounded-pill" placeholder="Email" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="NamaLengkap" class="form-label">Nama Lengkap</label>
+                    <input asp-for="NamaLengkap" class="form-control rounded-pill" placeholder="Nama Lengkap" />
+                    <span asp-validation-for="NamaLengkap" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="NoHp" class="form-label">No. HP</label>
+                    <input asp-for="NoHp" class="form-control rounded-pill" placeholder="No. HP" />
+                    <span asp-validation-for="NoHp" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Alamat" class="form-label">Alamat</label>
+                    <textarea asp-for="Alamat" class="form-control rounded-4" rows="3" placeholder="Alamat Lengkap"></textarea>
+                    <span asp-validation-for="Alamat" class="text-danger small"></span>
+                </div>
+
+
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input asp-for="Password" type="password" class="form-control rounded-pill" placeholder="Password" />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+
+
+                <div class="mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label">Konfirmasi Password</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control rounded-pill" placeholder="Konfirmasi Password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Role" class="form-label">Role</label>
+                    <select asp-for="Role" class="form-select rounded-pill">
+                        <option value="">-- Pilih Role --</option>
+                        <option value="User">Admin</option>
+                        <option value="Pembeli">Pembeli</option>
+                        <option value="Penjual">Penjual</option>
+                    </select>
+                    <span asp-validation-for="Role" class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary rounded-pill">Daftar</button>
+            </form>
+
+            <div class="mt-3 text-center">
+                <p>Sudah punya akun? <a asp-action="Login">Login di sini</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

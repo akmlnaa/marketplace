@@ -1,0 +1,130 @@
+﻿@{
+    ViewData["Title"] = "Beranda";
+    @model Marketplace.Models.HomeViewModel
+
+}
+
+<!-- Carousel Section -->
+<div id="carouselIkan" class="carousel slide mb-5" data-bs-ride="carousel">
+    <div class="carousel-inner rounded shadow">
+        <div class="carousel-item active">
+            <img src="~/images/carousel/slide1.jpg" class="d-block w-100" alt="Ikan Segar 1" style="height: 400px; object-fit: cover;">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+                <h5>Ikan Segar Langsung dari Laut</h5>
+                <p>Dapatkan hasil tangkapan terbaik dari nelayan lokal.</p>
+            </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="carousel-item">
+            <img src="~/images/carousel/slide2.jpg" class="d-block w-100" alt="Ikan Segar 2" style="height: 400px; object-fit: cover;">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+                <h5>Beragam Jenis Ikan</h5>
+                <p>Tuna, Kakap, Kembung, dan masih banyak lagi!</p>
+            </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="carousel-item">
+            <img src="~/images/carousel/slide3.png" class="d-block w-100" alt="Ikan Segar 3" style="height: 400px; object-fit: cover;">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+                <h5>Marketplace Terpercaya</h5>
+                <p>Transaksi aman, harga transparan, dan kualitas terjamin.</p>
+            </div>
+        </div>
+    </div>
+    <!-- Carousel Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselIkan" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Sebelumnya</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselIkan" data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+        <span class="visually-hidden">Selanjutnya</span>
+    </button>
+</div>
+
+<!-- Hero Section -->
+<div class="hero-section" style="background-color: #e0f7fa; padding: 60px 0;">
+    <div class="container mt-5">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center">
+                <img src="~/images/icon.png" alt="Ikan" class="img-fluid" style="max-height: 250px;" />
+            </div>
+            <div class="col-md-6">
+                <h1 class="display-5 fw-bold">Selamat Datang di Marketplace Cerdas</h1>
+                <p class="lead">Temukan dan beli ikan segar langsung dari nelayan lokal!</p>
+                <div class="mt-4">
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg me-2">Login</a>
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-success btn-lg">Daftar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5" />
+
+<!-- Information Cards Section -->
+<h2 class="text-center fw-bold mb-4">Ikan Terbaru</h2>
+<div class="row">
+    @foreach (var ikan in Model.DaftarIkan)
+    {
+        <div class="col-md-6 mb-4">
+            <div class="p-4 bg-white shadow rounded h-100 text-center">
+                <img src="@ikan.Gambar" alt="@ikan.NamaIkan" class="img-fluid mb-3" style="height:150px; object-fit:cover;" />
+                <h5 class="fw-bold">@ikan.NamaIkan</h5>
+                <p class="mb-1 text-muted">Rp @ikan.Harga.ToString("N0")</p>
+                <p class="small">@ikan.Deskripsi</p>
+                <a asp-controller="Ikan" asp-action="Detail" asp-route-id="@ikan.Id" class="btn btn-primary btn-sm mt-2">Lihat Detail</a>
+            </div>
+        </div>
+    }
+</div>
+
+<h2 class="text-center fw-bold mb-4 mt-5">Toko Terbaru</h2>
+<div class="row justify-content-center">
+    @foreach (var toko in Model.DaftarToko)
+    {
+        <div class="col-md-6 mb-4">
+            <div class="p-4 bg-white shadow rounded h-100 text-center">
+                <h5 class="fw-bold">@toko.NamaToko</h5>
+                <p class="small">@toko.Deskripsi</p>
+                <p class="text-muted"><i class="bi bi-geo-alt"></i> @toko.Alamat</p>
+                <a asp-controller="Toko" asp-action="Details" asp-route-id="@toko.Id" class="btn btn-success btn-sm mt-2">Kunjungi Toko</a>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+<!-- Footer Section -->
+<footer class="text-dark mt-5" style="background-color: #e0f7fa;">
+    <div class="container py-4">
+        <div class="row text-center text-md-start">
+            <div class="col-md-4 mb-3">
+                <h5 class="fw-bold">Marketplace Cerdas</h5>
+                <p>Tempat terbaik untuk menemukan dan membeli ikan segar dari nelayan lokal.</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h5 class="fw-bold">Navigasi</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/" class="text-dark text-decoration-none">Beranda</a></li>
+                    <li><a href="/Account/Login" class="text-dark text-decoration-none">Login</a></li>
+                    <li><a href="/Account/Register" class="text-dark text-decoration-none">Daftar</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h5 class="fw-bold">Ikuti Kami</h5>
+                <a href="#" class="text-dark me-3"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="text-dark me-3"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="text-dark me-3"><i class="bi bi-instagram"></i></a>
+            </div>
+        </div>
+        <hr class="border-dark" />
+        <div class="text-center">
+            <p class="mb-0">&copy; 2025 Marketplace Cerdas. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+
+

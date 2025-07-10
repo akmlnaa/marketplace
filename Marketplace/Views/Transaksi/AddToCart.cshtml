@@ -1,0 +1,31 @@
+﻿@model Marketplace.Models.Transaksi
+@{
+    Layout = "~/Views/Shared/_LayoutPembeli.cshtml";
+    ViewData["Title"] = "Tambah ke Keranjang";
+    var ikan = ViewBag.Ikan as Marketplace.Models.Ikan;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="card p-4">
+    <h4>@ikan?.NamaIkan</h4>
+    <p>Harga: Rp @ikan?.Harga</p>
+
+   
+    <form asp-action="AddToCart" method="post">
+        <input type="hidden" asp-for="IkanId" />
+        <div class="mb-3">
+            <label asp-for="Jumlah" class="form-label">Jumlah</label>
+            <input asp-for="Jumlah" class="form-control" type="number" min="1" value="1" />
+            <span asp-validation-for="Jumlah" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Tambah ke Keranjang</button>
+        <a asp-action="Index" asp-controller="Pembeli" class="btn btn-secondary">Batal</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

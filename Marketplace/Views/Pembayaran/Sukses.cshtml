@@ -1,0 +1,19 @@
+﻿@model Marketplace.Models.Pembayaran
+
+@{
+    ViewData["Title"] = "Pembayaran Berhasil";
+    Layout = "~/Views/Shared/_LayoutPembeli.cshtml";
+}
+
+<h2>Pembayaran Berhasil!</h2>
+
+<p>Terima kasih, bukti pembayaran kamu telah dikirim dan sedang menunggu konfirmasi.</p>
+
+<hr />
+<p><strong>Transaksi:</strong> @Model.Transaksi?.Ikan?.NamaIkan</p>
+<p><strong>Tanggal:</strong> @Model.TglPembayaran.ToString("dd MMMM yyyy")</p>
+<p><strong>Status:</strong> @Model.Status</p>
+
+<a asp-controller="Pembeli" asp-action="Riwayat" class="btn btn-primary">Lihat Riwayat Pembayaran</a>
+<a asp-controller="Pembeli" asp-action="Index" class="btn btn-secondary">Beranda</a>
+

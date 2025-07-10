@@ -1,0 +1,95 @@
+﻿@model Marketplace.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    ViewData["BodyClass"] = "auth-layout";
+}
+
+<style>
+    /* Pastikan wrapper mengambil seluruh tinggi layar */
+    .auth-wrapper {
+        min-height: 100vh; /* Setel tinggi minimal ke 100% layar */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Kiri - ilustrasi */
+    .auth-left {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+    }
+
+    /* Kanan - form login */
+    .auth-right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+    }
+
+    /* Form box styling */
+    .form-box {
+        width: 100%;
+        max-width: 450px; /* Memperbesar form sedikit */
+        padding: 40px; /* Menambahkan padding agar lebih lapang */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        background-color: white;
+    }
+
+    /* Styling untuk tombol login */
+    .btn {
+        width: 100%;
+        padding: 14px; /* Membuat tombol lebih besar */
+        font-size: 16px; /* Membesarkan ukuran font tombol */
+    }
+
+    /* Styling input fields */
+    .form-control {
+        font-size: 16px; /* Membesarkan ukuran font input field */
+        padding: 15px; /* Membuat input field lebih besar */
+    }
+
+    /* Styling untuk judul dan teks */
+    h2 {
+        font-size: 32px; /* Membesarkan ukuran font judul */
+    }
+</style>
+
+<div class="auth-wrapper">
+    <!-- Ilustrasi kiri -->
+    <div class="auth-left d-none d-md-flex">
+        <img src="~/images/illustration-login.jpg" alt="Ilustrasi Login" class="img-fluid" />
+    </div>
+
+    <!-- Form login -->
+    <div class="auth-right">
+        <div class="form-box">
+            <h2 class="mb-4 text-primary text-center">Welcome!</h2>
+
+            <form asp-action="Login" method="post">
+                <div class="mb-3">
+                    <input asp-for="Username" class="form-control rounded-pill px-3" placeholder="Username" />
+                    <span asp-validation-for="Username" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <input asp-for="Password" type="password" class="form-control rounded-pill px-3" placeholder="Password" />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 rounded-pill">Sign In</button>
+
+                <div class="mt-3 text-center">
+                    <small>Belum punya akun? <a asp-action="Register">Daftar sekarang</a></small>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

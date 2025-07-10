@@ -1,0 +1,71 @@
+﻿@model Marketplace.Models.Pembayaran
+
+@{
+    ViewData["Title"] = "Form Pembayaran";
+    Layout = "~/Views/Shared/_LayoutPembeli.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <strong>Terjadi kesalahan validasi:</strong>
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form asp-action="FormPembayaran" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="TransaksiId" />
+    <input type="hidden" asp-for="Status" />
+
+    <div class="mb-3">
+        <label asp-for="MetodePembayaran" class="form-label">Metode Pembayaran</label>
+        <select asp-for="MetodePembayaran" class="form-control" id="metodePembayaran">
+            <option value="Transfer Bank">Transfer Bank</option>
+            <option value="COD">COD</option>
+        </select>
+        <span asp-validation-for="MetodePembayaran" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Jumlah Bayar</label>
+        <input class="form-control" value="@Model.JumlahBayar.ToString("N0")" readonly />
+    </div>
+
+
+
+    <div class="mb-3" id="buktiBayarGroup">
+        <label for="buktiBayarFile" class="form-label">Upload Bukti Bayar</label>
+        <input type="file" name="buktiBayarFile" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Kirim Pembayaran</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById("metodePembayaran").addEventListener("change", function () {
+            const metode = this.value;
+            const buktiBayarGroup = document.getElementById("buktiBayarGroup");
+
+            if (metode === "COD") {
+                buktiBayarGroup.style.display = "none";
+            } else {
+                buktiBayarGroup.style.display = "block";
+            }
+        });
+
+        // Panggil sekali saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            const event = new Event("change");
+            document.getElementById("metodePembayaran").dispatchEvent(event);
+        });
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

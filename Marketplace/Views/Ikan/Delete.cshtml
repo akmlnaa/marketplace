@@ -1,0 +1,21 @@
+﻿@model Marketplace.Models.Ikan
+
+@{
+    ViewData["Title"] = "Hapus Ikan";
+}
+
+<div class="container mt-4">
+    <h2>Yakin ingin menghapus ikan ini?</h2>
+
+    <div class="alert alert-danger">
+        <strong>@Model.NamaIkan</strong><br />
+        Harga: Rp @Model.Harga.ToString("N0")<br />
+        Stok: @Model.Stok
+    </div>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Hapus</button>
+        <a asp-action="Index" class="btn btn-secondary">Batal</a>
+    </form>
+</div>

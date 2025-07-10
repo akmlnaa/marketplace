@@ -1,0 +1,29 @@
+﻿@model Marketplace.Models.User
+
+@{
+    Layout = "~/Views/Shared/_LayoutPembeli.cshtml";
+    ViewData["Title"] = "Profil Saya";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Profil Pembeli</h2>
+
+    <dl class="row">
+        <dt class="col-sm-3">Nama Lengkap</dt>
+        <dd class="col-sm-9">@Model.NamaLengkap</dd>
+
+        <dt class="col-sm-3">Username</dt>
+        <dd class="col-sm-9">@Model.Username</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">No. HP</dt>
+        <dd class="col-sm-9">@Model.NoHp</dd>
+
+        <dt class="col-sm-3">Alamat</dt>
+        <dd class="col-sm-9">@Model.Alamat</dd>
+    </dl>
+
+    <a asp-action="EditProfile" class="btn btn-primary">Edit Profil</a>
+</div>
