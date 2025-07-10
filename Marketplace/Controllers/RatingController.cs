@@ -57,7 +57,7 @@ namespace Marketplace.Controllers
             {
                 _context.Ratings.Add(rating);
                 _context.SaveChanges();
-                TempData["Success"] = "Rating berhasil diberikan.";
+                TempData["Success"] = "Rating sudah diberikan.";
                 return RedirectToAction("Riwayat", "Transaksi");
             }
 
