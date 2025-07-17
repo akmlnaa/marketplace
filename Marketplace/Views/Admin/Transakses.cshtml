@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Marketplace.Models.Transaksi>
+
+@{
+    ViewData["Title"] = "Daftar Transaksi";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml"; 
+}
+
+<h2 class="mt-3">Daftar Transaksi</h2>
+<hr />
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Belum ada transaksi.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover mt-3">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Pembeli</th>
+                <th>Ikan</th>
+                <th>Jumlah</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Tanggal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaksi in Model)
+            {
+                <tr>
+                    <td>@transaksi.Id</td>
+                    <td>@transaksi.Pembeli?.NamaLengkap (@transaksi.Pembeli?.Username)</td>
+                    <td>@transaksi.Ikan?.NamaIkan</td>
+                    <td>@transaksi.Jumlah</td>
+                    <td>Rp @((transaksi.TotalHarga).ToString("N0"))</td>
+                    <td>
+                        <span class="badge bg-@(transaksi.Status == "Selesai" ? "success" : transaksi.Status == "Menunggu" ? "warning" : "secondary")">
+                            @transaksi.Status
+                        </span>
+                    </td>
+                    <td>@transaksi.Tanggal.ToString("dd MMM yyyy, HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

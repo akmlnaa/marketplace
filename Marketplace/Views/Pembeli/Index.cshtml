@@ -23,16 +23,104 @@
     </div>
 </form>
 
-<!-- Kategori -->
-<div class="mb-4">
-    <h5>Kategori:</h5>
-    <div class="d-flex flex-wrap gap-2">
-        <span class="badge bg-secondary p-2">Ikan Air Tawar</span>
-        <span class="badge bg-secondary p-2">Ikan Laut</span>
-        <span class="badge bg-secondary p-2">Ikan Fillet</span>
-        <span class="badge bg-secondary p-2">Paket Hemat</span>
+<!-- Bubble Chatbot -->
+<div id="chatbot-bubble" onclick="toggleChat()" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    z-index: 9999;">
+    Tanya SiCerdas 🤖
+</div>
+
+<!-- Chat Panel -->
+<div id="chat-panel" style="
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 320px;
+    height: 480px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    padding: 10px;
+    z-index: 9998;
+    display: flex;
+    flex-direction: column;
+">
+    <div id="chat-messages" style="
+        flex: 1;
+        overflow-y: auto;
+        margin-bottom: 10px;
+        font-size: 14px;
+    "></div>
+
+    <div class="input-group">
+        <input type="text" id="user-input" class="form-control" placeholder="Ketik pertanyaan..." />
+        <button class="btn btn-primary" onclick="sendQuestion()">Kirim</button>
     </div>
 </div>
+
+<script>
+    const apiKey = "AIzaSyDGpE8onyaX5H_2tXC87_7PfjE6iI9SNY8";
+
+    function toggleChat() {
+        const panel = document.getElementById("chat-panel");
+        panel.style.display = panel.style.display === "none" ? "flex" : "none";
+    }
+
+    async function sendQuestion() {
+        const inputElement = document.getElementById("user-input");
+        const question = inputElement.value.trim();
+        if (!question) return;
+
+        appendMessage("🧑‍💬 Kamu", question);
+        inputElement.value = "";
+
+        try {
+            const url = `https://corsproxy.io/?https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{
+                    parts: [{ text: question }]
+                }]
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error("Respons jaringan tidak OK");
+
+            const result = await response.json();
+            const answer = result.candidates?.[0]?.content?.parts?.[0]?.text ?? "Tidak ada jawaban.";
+
+            appendMessage("🤖 Gemini", answer);
+        } catch (error) {
+            console.error("Gagal:", error);
+            appendMessage("🤖 Gemini", "Maaf, terjadi kesalahan. Coba lagi nanti.");
+        }
+    }
+
+    function appendMessage(sender, message) {
+        const chat = document.getElementById("chat-messages");
+        const msg = document.createElement("div");
+        msg.innerHTML = `<strong>${sender}:</strong> <div style="white-space: pre-wrap;">${message}</div><hr/>`;
+        chat.appendChild(msg);
+        chat.scrollTop = chat.scrollHeight;
+    }
+</script>
 
 <!-- Daftar Ikan -->
 @if (!Model.Any())
@@ -52,20 +140,32 @@ else
                         <p class="card-text mb-1"><strong>Rp @ikan.Harga.ToString("N0")</strong></p>
                         <span class="badge bg-success mb-2">Stok: @ikan.Stok</span>
 
-                        <!-- Dummy Rating -->
+                        @{
+                            var rataRating = ikan.Ratings != null && ikan.Ratings.Any() ? ikan.Ratings.Average(r => r.Nilai) : 0;
+                            var bintangUtuh = (int)Math.Floor(rataRating);
+                            var setengahBintang = rataRating - bintangUtuh >= 0.5;
+                            var sisaKosong = 5 - bintangUtuh - (setengahBintang ? 1 : 0);
+                        }
+
                         <div class="mb-2 text-warning">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <i class="far fa-star"></i>
+                            @for (int i = 0; i < bintangUtuh; i++)
+                            {
+                                <i class="fas fa-star"></i>
+                            }
+                            @if (setengahBintang)
+                            {
+                                <i class="fas fa-star-half-alt"></i>
+                            }
+                            @for (int i = 0; i < sisaKosong; i++)
+                            {
+                                <i class="far fa-star"></i>
+                            }
+                            <small class="text-muted">(@rataRating.ToString("0.0"))</small>
                         </div>
 
                         <a href="@Url.Action("AddToCart", "Transaksi", new { ikanId = ikan.Id })" class="btn btn-outline-success mb-2 w-100">
                             <i class="fas fa-cart-plus me-1"></i> Tambah ke Keranjang
                         </a>
-
-
 
                         <a href="@Url.Action("Detail", "Ikan", new { id = ikan.Id })" class="btn btn-info w-100">
                             <i class="fas fa-eye me-1"></i> Lihat Detail
@@ -77,7 +177,6 @@ else
     </div>
 }
 
-<!-- Styles -->
 <style>
     .hover-shadow:hover {
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);

@@ -40,6 +40,11 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Harga).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TanggalPublish).HasColumnType("datetime");
 
+            entity.HasOne(d => d.Penjual).WithMany(p => p.Ikans)
+                .HasForeignKey(d => d.PenjualId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Ikan_User_PenjualId");
+
             entity.HasOne(d => d.Toko).WithMany(p => p.Ikans)
                 .HasForeignKey(d => d.TokoId)
                 .HasConstraintName("FK_Ikans_Tokos");

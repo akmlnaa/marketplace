@@ -79,25 +79,27 @@ namespace Marketplace.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existingUser = _context.Users
+                var user = _context.Users
                     .FirstOrDefault(u => u.Username == model.Username && u.Password == model.Password);
 
-                if (existingUser != null)
+                if (user != null)
                 {
-                    HttpContext.Session.SetInt32("UserId", existingUser.Id);
-                    HttpContext.Session.SetString("Username", existingUser.Username);
-                    HttpContext.Session.SetString("Role", existingUser.Role);
+                    // Simpan informasi user di session
+                    HttpContext.Session.SetInt32("UserId", user.Id);
+                    HttpContext.Session.SetString("Username", user.Username);
+                    HttpContext.Session.SetString("Role", user.Role);
 
-                    // Arahkan sesuai role
-                    switch (existingUser.Role.ToLower())
+                    // Arahkan user sesuai peran/role
+                    switch (user.Role.ToLower())
                     {
-                        case "penjual":
-                            return RedirectToAction("Index", "Penjual");
                         case "admin":
                             return RedirectToAction("Index", "Admin");
+                        case "penjual":
+                            return RedirectToAction("Index", "Penjual");
                         case "pembeli":
                             return RedirectToAction("Index", "Pembeli");
                         default:
+                            // Jika role tidak dikenali, arahkan ke home
                             return RedirectToAction("Index", "Home");
                     }
                 }
@@ -107,6 +109,7 @@ namespace Marketplace.Controllers
 
             return View(model);
         }
+
         public IActionResult Logout()
             {
                 // Hapus semua data session

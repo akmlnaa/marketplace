@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Marketplace.Models.Ikan>
+
+@{
+    ViewData["Title"] = "Daftar Ikan";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="mb-4">Daftar Ikan</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning text-center">Tidak ada ikan yang terdaftar.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Gambar</th>
+                <th>Nama Ikan</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Penjual</th>
+                <th>Toko</th>
+                <th>Tanggal Publish</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ikan in Model.Select((item, index) => new { item, index }))
+            {
+                <tr>
+                    <td>@(ikan.index + 1)</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(ikan.item.Gambar))
+                        {
+                            <img src="@ikan.item.Gambar" alt="Ikan" style="height: 60px; width: 60px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Tidak ada gambar</span>
+                        }
+                    </td>
+                    <td>@ikan.item.NamaIkan</td>
+                    <td>Rp @ikan.item.Harga.ToString("N0")</td>
+                    <td>@ikan.item.Stok</td>
+                    <td>@ikan.item.Penjual?.Username</td>
+                    <td>@ikan.item.Toko?.NamaToko</td>
+                    <td>@ikan.item.TanggalPublish?.ToString("dd MMM yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

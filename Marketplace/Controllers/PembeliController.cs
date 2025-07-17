@@ -18,7 +18,9 @@ namespace Marketplace.Controllers
 
         public IActionResult Index(string search, string sort)
         {
-            var query = _context.Ikans.AsQueryable();
+            var query = _context.Ikans
+                .Include(i => i.Ratings) 
+                .AsQueryable();
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -39,8 +41,10 @@ namespace Marketplace.Controllers
             ViewBag.CurrentSort = sort;
 
             var daftarIkan = query.ToList();
+
             return View(daftarIkan);
         }
+
         public IActionResult Profile()
         {
             

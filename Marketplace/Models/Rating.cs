@@ -17,7 +17,7 @@ public partial class Rating
 
     public DateTime Tanggal { get; set; }
 
-    public virtual Ikan Ikan { get; set; } = null!;
+    public virtual Ikan? Ikan { get; set; } = null!;
 
-    public virtual User Pembeli { get; set; } = null!;
+    public virtual User? Pembeli { get; set; } = null!;
 }

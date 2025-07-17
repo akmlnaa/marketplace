@@ -24,6 +24,8 @@ public partial class Ikan
 
     public int? TokoId { get; set; }
 
+    public virtual User Penjual { get; set; } = null!;
+
     public virtual ICollection<Rating> Ratings { get; set; } = new List<Rating>();
 
     public virtual Toko? Toko { get; set; }

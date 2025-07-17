@@ -5,9 +5,22 @@
 }
 
 <h2>Beri Rating</h2>
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
 
 <form asp-action="Beri" method="post">
     <input type="hidden" asp-for="IkanId" />
+
 
     <div class="mb-3">
         <label asp-for="Nilai" class="form-label">Nilai (1–5)</label>

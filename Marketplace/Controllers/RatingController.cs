@@ -27,11 +27,21 @@ namespace Marketplace.Controllers
             var pembeliId = GetPembeliId();
             if (pembeliId == 0) return RedirectToAction("Login", "Account");
 
+            var pernahBeli = _context.Transakses
+                 .Any(t => t.IkanId == ikanId && t.PembeliId == pembeliId && t.Status == "Selesai");
+
+            if (!pernahBeli)
+            {
+                TempData["Error"] = "Kamu belum menyelesaikan pembelian ikan ini.";
+                return RedirectToAction("Riwayat", "Pembeli");
+            }
+
+
             var sudahRating = _context.Ratings.Any(r => r.IkanId == ikanId && r.PembeliId == pembeliId);
             if (sudahRating)
             {
                 TempData["Error"] = "Kamu sudah memberi rating untuk ikan ini.";
-                return RedirectToAction("Riwayat", "Transaksi");
+                return RedirectToAction("Riwayat", "Pembeli");
             }
 
             var rating = new Rating
@@ -58,7 +68,7 @@ namespace Marketplace.Controllers
                 _context.Ratings.Add(rating);
                 _context.SaveChanges();
                 TempData["Success"] = "Rating berhasil diberikan.";
-                return RedirectToAction("Riwayat", "Transaksi");
+                return RedirectToAction("Riwayat", "Pembeli");
             }
 
             return View(rating);
