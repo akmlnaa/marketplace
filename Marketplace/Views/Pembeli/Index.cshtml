@@ -69,47 +69,35 @@
 </div>
 
 <script>
-    const apiKey = "AIzaSyDGpE8onyaX5H_2tXC87_7PfjE6iI9SNY8";
-
     function toggleChat() {
         const panel = document.getElementById("chat-panel");
         panel.style.display = panel.style.display === "none" ? "flex" : "none";
     }
 
     async function sendQuestion() {
-        const inputElement = document.getElementById("user-input");
-        const question = inputElement.value.trim();
+        const input = document.getElementById("user-input");
+        const question = input.value.trim();
         if (!question) return;
 
         appendMessage("🧑‍💬 Kamu", question);
-        inputElement.value = "";
+        input.value = "";
 
         try {
-            const url = `https://corsproxy.io/?https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{
-                    parts: [{ text: question }]
-                }]
-            };
-
-            const response = await fetch(url, {
+            const response = await fetch('/api/Gemini/Ajukan', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({ question: question })
             });
 
-            if (!response.ok) throw new Error("Respons jaringan tidak OK");
+            if (!response.ok) throw new Error("Network response was not ok");
 
-            const result = await response.json();
-            const answer = result.candidates?.[0]?.content?.parts?.[0]?.text ?? "Tidak ada jawaban.";
-
+            const answer = await response.text();
             appendMessage("🤖 Gemini", answer);
         } catch (error) {
             console.error("Gagal:", error);
-            appendMessage("🤖 Gemini", "Maaf, terjadi kesalahan. Coba lagi nanti.");
+            appendMessage("🤖 Gemini", "Maaf, terjadi kesalahan.");
         }
     }
 
@@ -121,6 +109,7 @@
         chat.scrollTop = chat.scrollHeight;
     }
 </script>
+
 
 <!-- Daftar Ikan -->
 @if (!Model.Any())
