@@ -1,25 +1,30 @@
 using Marketplace.Data;
 using Microsoft.EntityFrameworkCore;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient();
 
-
-// Tambahkan koneksi ke database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Tambahkan support untuk session
 builder.Services.AddSession();
-
-// Tambahkan support untuk MVC
 builder.Services.AddControllersWithViews();
+
+// Tambahkan CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
 var app = builder.Build();
 
-// Konfigurasi middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -31,11 +36,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Gunakan Session (penting untuk login)
+// Middleware CORS
+app.UseCors("AllowAll");
+
 app.UseSession();
-
 app.UseAuthorization();
-
 
 app.MapControllerRoute(
     name: "default",
