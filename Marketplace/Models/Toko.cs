@@ -17,5 +17,5 @@ public partial class Toko
 
     public virtual ICollection<Ikan> Ikans { get; set; } = new List<Ikan>();
 
-    public virtual User Penjual { get; set; } = null!;
+    public virtual User? Penjual { get; set; } = null!;
 }

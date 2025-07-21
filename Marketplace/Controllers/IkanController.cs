@@ -48,7 +48,7 @@ namespace Marketplace.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Ikan ikan, IFormFile GambarFile)
+        public async Task<IActionResult> Create(Ikan ikan)
         {
             var user = GetLoggedInUser();
             if (user == null) return RedirectToAction("Login", "Account");
@@ -63,16 +63,17 @@ namespace Marketplace.Controllers
                     return RedirectToAction("Create", "Toko");
                 }
 
-                ikan.TokoId = toko.Id; 
+                ikan.TokoId = toko.Id;
 
-                if (GambarFile != null && GambarFile.Length > 0)
+                // GambarFile dari model
+                if (ikan.GambarFile != null && ikan.GambarFile.Length > 0)
                 {
-                    var fileName = Guid.NewGuid() + Path.GetExtension(GambarFile.FileName);
+                    var fileName = Guid.NewGuid() + Path.GetExtension(ikan.GambarFile.FileName);
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        await GambarFile.CopyToAsync(stream);
+                        await ikan.GambarFile.CopyToAsync(stream);
                     }
 
                     ikan.Gambar = "/images/" + fileName;
@@ -87,6 +88,7 @@ namespace Marketplace.Controllers
         }
 
 
+
         public IActionResult Edit(int id)
         {
             var ikan = _context.Ikans.Find(id);
@@ -98,42 +100,71 @@ namespace Marketplace.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Ikan ikan)
+        public async Task<IActionResult> Edit(int id, Ikan updatedIkan)
         {
-            if (ikan.PenjualId != GetLoggedInUser()?.Id)
-                return Unauthorized();
+            var existingIkan = await _context.Ikans.FindAsync(id);
+            var loggedInUser = GetLoggedInUser();
+
+            if (existingIkan == null || existingIkan.PenjualId != loggedInUser?.Id)
+                return NotFound();
 
             if (ModelState.IsValid)
             {
-                _context.Ikans.Update(ikan);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                // Update properti teks
+                existingIkan.NamaIkan = updatedIkan.NamaIkan;
+                existingIkan.Harga = updatedIkan.Harga;
+                existingIkan.Stok = updatedIkan.Stok;
+                existingIkan.Deskripsi = updatedIkan.Deskripsi;
+                existingIkan.TanggalPublish = DateTime.Now;
+
+                // Jika user upload gambar baru
+                if (updatedIkan.GambarFile != null && updatedIkan.GambarFile.Length > 0)
+                {
+                    var fileName = Guid.NewGuid() + Path.GetExtension(updatedIkan.GambarFile.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await updatedIkan.GambarFile.CopyToAsync(stream);
+                    }
+
+                    // Update path gambar
+                    existingIkan.Gambar = "/images/" + fileName;
+                }
+
+                _context.Ikans.Update(existingIkan);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Toko");
             }
 
-            return View(ikan);
+            return View(updatedIkan);
         }
 
-        public IActionResult Delete(int id)
-        {
-            var ikan = _context.Ikans.Find(id);
-            if (ikan == null || ikan.PenjualId != GetLoggedInUser()?.Id)
-                return NotFound();
-
-            return View(ikan);
-        }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ikan = _context.Ikans.Find(id);
-            if (ikan != null && ikan.PenjualId == GetLoggedInUser()?.Id)
-            {
-                _context.Ikans.Remove(ikan);
-                _context.SaveChanges();
-            }
-            return RedirectToAction(nameof(Index));
+            // Temukan ikan sekaligus transaksi terkait
+            var ikan = await _context.Ikans
+                .Include(i => i.Transaksis)
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            // Cek kepemilikan & keberadaan
+            if (ikan == null || ikan.PenjualId != GetLoggedInUser()?.Id)
+                return NotFound();
+
+            // Hapus semua transaksi terkait
+            _context.Transakses.RemoveRange(ikan.Transaksis);
+
+            // Hapus ikan
+            _context.Ikans.Remove(ikan);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Toko");
         }
+
+
 
         public IActionResult Detail(int id)
         {

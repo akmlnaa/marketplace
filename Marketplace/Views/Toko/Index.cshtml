@@ -56,12 +56,54 @@
                             </div>
                             <div class="card-footer bg-white border-0 d-flex justify-content-between">
                                 <a href="@Url.Action("Edit", "Ikan", new { id = ikan.Id })" class="btn btn-sm btn-outline-primary">Edit</a>
-                                <a href="@Url.Action("Delete", "Ikan", new { id = ikan.Id })" class="btn btn-sm btn-outline-danger">Hapus</a>
+                                <button class="btn btn-sm btn-outline-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal"
+                                        data-id="@ikan.Id"
+                                        data-nama="@ikan.NamaIkan">
+                                    Hapus
+                                </button>
+
                             </div>
                         </div>
                     </div>
                 }
             </div>
+            <!-- Modal Konfirmasi Hapus -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form method="post" id="deleteForm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Apakah Anda yakin ingin menghapus ikan <strong id="namaIkan"></strong>?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-danger">Hapus</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script>
+                var deleteModal = document.getElementById('deleteModal');
+                deleteModal.addEventListener('show.bs.modal', function (event) {
+                    var button = event.relatedTarget;
+                    var ikanId = button.getAttribute('data-id');
+                    var namaIkan = button.getAttribute('data-nama');
+
+                    var form = document.getElementById('deleteForm');
+                    form.action = '/Ikan/Delete/' + ikanId;
+
+                    var namaSpan = document.getElementById('namaIkan');
+                    namaSpan.textContent = namaIkan;
+                });
+            </script>
+
         }
         else
         {

@@ -42,6 +42,7 @@ app.UseCors("AllowAll");
 app.UseSession();
 app.UseAuthorization();
 
+app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

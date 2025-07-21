@@ -52,9 +52,11 @@
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     padding: 10px;
     z-index: 9998;
-    display: flex;
     flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 ">
+
     <div id="chat-messages" style="
         flex: 1;
         overflow-y: auto;
@@ -69,10 +71,22 @@
 </div>
 
 <script>
-    function toggleChat() {
+        function toggleChat() {
         const panel = document.getElementById("chat-panel");
-        panel.style.display = panel.style.display === "none" ? "flex" : "none";
+
+        if (panel.style.display === "none") {
+            panel.style.display = "flex";
+            setTimeout(() => {
+                panel.style.opacity = "1";
+            }, 10); 
+        } else {
+            panel.style.opacity = "0";
+            setTimeout(() => {
+                panel.style.display = "none";
+            }, 300); 
+        }
     }
+
 
     async function sendQuestion() {
         const input = document.getElementById("user-input");
@@ -83,7 +97,7 @@
         input.value = "";
 
         try {
-            const response = await fetch('/api/Gemini/Ajukan', {
+            const response = await fetch("/api/Gemini/Ajukan", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

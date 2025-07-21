@@ -24,13 +24,13 @@ public partial class Ikan
 
     public int? TokoId { get; set; }
 
-    public virtual User Penjual { get; set; } = null!;
+    public virtual User? Penjual { get; set; } = null!;
 
     public virtual ICollection<Rating> Ratings { get; set; } = new List<Rating>();
 
     public virtual Toko? Toko { get; set; }
+   
+    public virtual ICollection<Transaksi> Transaksis { get; set; } = new List<Transaksi>();
     [NotMapped]
     public IFormFile? GambarFile { get; set; }
-
-    public virtual ICollection<Transaksi> Transaksis { get; set; } = new List<Transaksi>();
 }
